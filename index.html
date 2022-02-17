@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>parallax.js</title>
+	<link rel="stylesheet" type="text/css" href="assets/styles/css/main.css"/>
+	<link rel="stylesheet" href="assets/styles/css/other.css">
+	<link rel="shortcut icon" href="./tayi/image/earth.png" type="image/png">
+</head>
+<body>
+	<div id="fb-root"></div>
+	<canvas></canvas>
+    <div id="container" class="wrapper">
+		<ul id="scene" class="scene unselectable"
+			data-friction-x="0.1"
+			data-friction-y="0.1"
+			data-scalar-x="25"
+			data-scalar-y="15">
+            <li class="layer" data-depth="0.00"></li>
+			<li class="layer" data-depth="0.10"><div class="background"></div></li>
+            <li class="layer" data-depth="0.20"><div class="rockt plain depth-80"></div></li>
+			<li class="layer" data-depth="0.60"><div class="rockt paint depth-100"></div></li>
+            <li class="layer" data-depth="0.30"><div class="planet earth"></div></li>
+            <li class="layer" data-depth="0.40"><div class="planet man"></div></li>
+            <li class="layer" data-depth="0.50"><div class="planet xpla"></div></li>
+            <li class="layer" data-depth="0.80"><div class="planet ypla"></div></li>
+            <li class="layer" data-depth="0.70"><div class="planet zpla"></div></li>
+        </ul>
+		<section id="about" class="wrapper about hide accelerate">
+			<div class="cell accelerate">
+				<div class="cables center accelerate">
+					<div class="panel accelerate">
+						<header>
+							<h1>Tayimilkyway</h1>
+						</header>
+						<p>你好，欢迎来到她亦满眼星河的小站。我真的很高兴用这种方式认识你，缘分这种东西谁也说不准，但相识之后你就是我的好朋友了，我也希望我的小站可以有能帮助到你的地方。</p>
+						<p>此页面只是引导页，想要了解更多请点击左下方入口，谢谢。</p>
+						<div class="social">
+							<a href="http://wpa.qq.com/msgrd?v=3&uin=3526304109&site=qq&menu=yes" class="twitter-follow-button" data-show-count="false" target="_blank">添加 <span class="handle">qq</span></a>
+							<a id="copyCode" href="javascript:void(0)" onclick="goWechat()" class="btn twitter-follow-button" data-show-count="false">&nbsp;&nbsp;复制 <span class="handle">微信(已复制到剪贴板)</span></a>
+						</div>
+						<ul class="links">
+							<li><a href="./tayi.html" target="_blank">了解更多</a></li>
+							<li><a class="github" target="_blank" href="https://github.com/whalefallspace">GitHub</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
+		<button id="toggle" class="toggle i">
+			<div class="cross">
+				<div class="x"></div>
+				<div class="y"></div>
+			</div>
+		</button>
+		<footer>
+			<div style="width:800px;height: 100px;;margin:0 auto; padding:5px 0;text-align:center;">
+				<a target="_blank" href="https://beian.miit.gov.cn/"><p style="color:#939393;">&nbsp;&nbsp;青ICP备2021000128号-1</p></a>
+				<br>
+				<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=63020202000023" style="display:inline-block;text-decoration:none;height:40px;line-height:40px;">
+				<img src="https://tayimilkyway.oss-cn-shenzhen.aliyuncs.com/kodbox/028e90b16952125adee336996e38e055.png" style="float:left;width: 23px;height: 23px;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px;color:#939393;">青公网安备63020202000023号</p></a>		 	
+			</div>
+		</footer>
+	</div>
+	<!-- Scripts -->
+	<script src="./tayi/js/jquery.min.js"></script>
+	<script src="assets/scripts/js/libraries.min.js"></script>
+	<script src="deploy/jquery.parallax.js"></script>
+	<script src="assets/scripts/js/other.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
+	<script>
+    var clipboard = new ClipboardJS(".btn", {
+        text: function () {
+            return "wwr20010810";
+        }
+    });
+ 
+ 	/* 跳转 */
+    function goWechat() {
+        setTimeout('window.location.href="weixin://"', 1500);
+    }
+
+	// jQuery Selections
+	var $html = $('html'),
+			$container = $('#container'),
+			$prompt = $('#prompt'),
+			$toggle = $('#toggle'),
+			$about = $('#about'),
+			$scene = $('#scene');
+
+	// Hide browser menu.
+	(function() {
+		setTimeout(function(){window.scrollTo(0,0);},0);
+	})();
+
+	// Setup FastClick.
+	FastClick.attach(document.body);
+
+	// Add touch functionality.
+	if (Hammer.HAS_TOUCHEVENTS) {
+		$container.hammer({drag_lock_to_axis: true});
+		_.tap($html, 'a,button,[data-tap]');
+	}
+
+	// Add touch or mouse class to html element.
+	$html.addClass(Hammer.HAS_TOUCHEVENTS ? 'touch' : 'mouse');
+
+	// Resize handler.
+	(resize = function() {
+		$scene[0].style.width = window.innerWidth + 'px';
+		$scene[0].style.height = window.innerHeight + 'px';
+		if (!$prompt.hasClass('hide')) {
+			if (window.innerWidth < 600) {
+				$toggle.addClass('hide');
+			} else {
+				$toggle.removeClass('hide');
+			}
+		}
+	})();
+
+	// Attach window listeners.
+	window.onresize = _.debounce(resize, 200);
+	window.onscroll = _.debounce(resize, 200);
+
+	function showDetails() {
+		$about.removeClass('hide');
+		$toggle.removeClass('i');
+	}
+
+	function hideDetails() {
+		$about.addClass('hide');
+		$toggle.addClass('i');
+	}
+
+	// Listen for toggle click event.
+	$toggle.on('click', function(event) {
+		$toggle.hasClass('i') ? showDetails() : hideDetails();
+	});
+
+	// Pretty simple huh?
+	$scene.parallax();
+
+	// Check for orientation support.
+	setTimeout(function() {
+		if ($scene.data('mode') === 'cursor') {
+			$prompt.removeClass('hide');
+			if (window.innerWidth < 600) $toggle.addClass('hide');
+			$prompt.on('click', function(event) {
+				$prompt.addClass('hide');
+				if (window.innerWidth < 600) {
+					setTimeout(function() {
+						$toggle.removeClass('hide');
+					},1200);
+				}
+			});
+		}
+	},1000);
+	</script>
+</body>
+</html>
